@@ -69,9 +69,27 @@ jobs:
         run: |
           buildozer -v android debug
 
+      - name: Print Buildozer Logs on Failure
+        if: failure()
+        run: |
+          echo "=== Displaying recent Buildozer logs ==="
+          if [ -d ".buildozer/logs" ]; then
+            tail -n 200 .buildozer/logs/* || true
+          fi
+
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: CamScanner-Android-APK
           path: bin/*.apk
           if-no-files-found: error
+
+      - name: Upload Buildozer Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buildozer-debug-logs
+          path: |
+            .buildozer/logs/
+            .buildozer/dump.txt
+          if-no-files-found: ignore
