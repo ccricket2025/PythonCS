@@ -2,16 +2,11 @@ name: Build Android APK with Buildozer
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build Android APK
     runs-on: ubuntu-22.04
 
     steps:
@@ -29,38 +24,27 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Cache Buildozer Global Directory
+      - name: Cache Buildozer Global and Virtualenvs
         uses: actions/cache@v4
         with:
-          path: ~/.buildozer
-          key: ${{ runner.os }}-buildozer-global-${{ hashFiles('buildozer.spec') }}
+          path: |
+            ~/.buildozer
+            ~/.local/share/python-for-android
+          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
           restore-keys: |
-            ${{ runner.os }}-buildozer-global-
-
-      - name: Cache Python-for-Android
-        uses: actions/cache@v4
-        with:
-          path: .buildozer
-          key: ${{ runner.os }}-buildozer-local-${{ hashFiles('buildozer.spec') }}
-          restore-keys: |
-            ${{ runner.os }}-buildozer-local-
+            ${{ runner.os }}-buildozer-
 
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
+          sudo apt-get install -y \
             build-essential \
             ccache \
             git \
-            libncurses5:i386 \
-            libstdc++6:i386 \
-            libgtk2.0-0:i386 \
-            libasound2:i386 \
-            zlib1g:i386 \
-            zlib1g-dev \
             libffi-dev \
             libssl-dev \
             libsqlite3-dev \
+            zlib1g-dev \
             cmake \
             autoconf \
             automake \
@@ -69,18 +53,20 @@ jobs:
             zip \
             unzip
 
-      - name: Install Python Dependencies
+      - name: Install Python Dependencies & Buildozer
         run: |
-          python -m pip install --upgrade pip setuptools wheel
-          pip install buildozer cython==0.29.36
+          pip install --upgrade pip setuptools wheel
+          pip install cython==0.29.36
+          pip install buildozer
 
       - name: Build APK with Buildozer
         run: |
-          buildozer -v android debug
+          # Automatically accept Android SDK licenses
+          yes | buildozer -v android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: CamScanner-Android-APK
           path: bin/*.apk
-          retention-days: 14
+          if-no-files-found: error
