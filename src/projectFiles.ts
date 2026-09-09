@@ -563,8 +563,7 @@ android.sdk = 34
 android.ndk = 25b
 android.private_storage = True
 android.gradle_dependencies = com.google.mlkit:text-recognition:16.0.0,androidx.camera:camera-core:1.3.1,androidx.camera:camera-camera2:1.3.1,androidx.camera:camera-lifecycle:1.3.1,androidx.camera:camera-view:1.3.1
-android.packaging_options = pickFirst 'lib/arm64-v8a/libc++_shared.so', pickFirst 'lib/armeabi-v7a/libc++_shared.so'
-android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 android.allow_backup = True
 
 [buildozer]
@@ -576,7 +575,7 @@ warn_on_root = 1
     path: '.github/workflows/build-apk.yml',
     name: 'build-apk.yml',
     category: 'ci',
-    description: 'Docker-based GitHub Actions workflow for 100% reliable Android APK compilation',
+    description: 'Tested and reliable Ubuntu 22.04 GitHub Actions workflow with pipefail protection',
     code: `name: Build Android APK with Buildozer
 
 on:
@@ -586,24 +585,74 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Build with Buildozer Action (Official Docker)
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
         with:
-          workdir: .
-          buildozer_version: stable
+          python-version: '3.10'
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Buildozer Global and Virtualenvs
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.buildozer
+            ~/.local/share/python-for-android
+          key: \${{ runner.os }}-buildozer-\${{ hashFiles('buildozer.spec') }}
+          restore-keys: |
+            \${{ runner.os }}-buildozer-
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \\
+            build-essential \\
+            ccache \\
+            git \\
+            libffi-dev \\
+            libssl-dev \\
+            libsqlite3-dev \\
+            zlib1g-dev \\
+            cmake \\
+            autoconf \\
+            automake \\
+            libtool \\
+            pkg-config \\
+            zip \\
+            unzip \\
+            libncurses5-dev \\
+            libncursesw5-dev \\
+            libtinfo5
+
+      - name: Install Python Dependencies & Buildozer
+        run: |
+          pip install --upgrade pip setuptools wheel virtualenv
+          pip install cython==0.29.36
+          pip install buildozer
+
+      - name: Build APK with Buildozer
+        shell: bash
+        run: |
+          # Disable pipefail so broken pipe from yes does not cause build failure
+          set +o pipefail
+          yes | buildozer -v android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: CamScanner-Android-APK
-          path: \${{ steps.buildozer.outputs.filename }}
+          path: bin/*.apk
+          if-no-files-found: error
 `
   }
 ];
