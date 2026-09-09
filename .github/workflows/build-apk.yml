@@ -46,25 +46,28 @@ jobs:
             libsqlite3-dev \
             zlib1g-dev \
             cmake \
+            ninja-build \
             autoconf \
             automake \
             libtool \
             pkg-config \
             zip \
-            unzip
+            unzip \
+            libncurses5-dev \
+            libncursesw5-dev \
+            libtinfo5 \
+            autopoint \
+            gettext
 
       - name: Install Python Dependencies & Buildozer
         run: |
-          pip install --upgrade pip setuptools wheel
+          pip install --upgrade pip setuptools wheel virtualenv
           pip install cython==0.29.36
           pip install buildozer
 
       - name: Build APK with Buildozer
-        shell: bash
         run: |
-          # Disable pipefail so broken pipe does not abort the workflow
-          set +o pipefail
-          yes | buildozer -v android debug
+          buildozer -v android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
