@@ -561,6 +561,8 @@ android.api = 34
 android.minapi = 24
 android.sdk = 34
 android.ndk = 25b
+android.accept_sdk_license = True
+android.skip_update = False
 android.private_storage = True
 android.gradle_dependencies = com.google.mlkit:text-recognition:16.0.0,androidx.camera:camera-core:1.3.1,androidx.camera:camera-camera2:1.3.1,androidx.camera:camera-lifecycle:1.3.1,androidx.camera:camera-view:1.3.1
 android.archs = arm64-v8a
@@ -575,7 +577,7 @@ warn_on_root = 1
     path: '.github/workflows/build-apk.yml',
     name: 'build-apk.yml',
     category: 'ci',
-    description: 'Tested and reliable Ubuntu 22.04 GitHub Actions workflow with pipefail protection',
+    description: 'Tested and reliable Ubuntu 22.04 GitHub Actions workflow with automated SDK licensing',
     code: `name: Build Android APK with Buildozer
 
 on:
@@ -624,6 +626,7 @@ jobs:
             libsqlite3-dev \\
             zlib1g-dev \\
             cmake \\
+            ninja-build \\
             autoconf \\
             automake \\
             libtool \\
@@ -632,7 +635,9 @@ jobs:
             unzip \\
             libncurses5-dev \\
             libncursesw5-dev \\
-            libtinfo5
+            libtinfo5 \\
+            autopoint \\
+            gettext
 
       - name: Install Python Dependencies & Buildozer
         run: |
@@ -641,11 +646,8 @@ jobs:
           pip install buildozer
 
       - name: Build APK with Buildozer
-        shell: bash
         run: |
-          # Disable pipefail so broken pipe from yes does not cause build failure
-          set +o pipefail
-          yes | buildozer -v android debug
+          buildozer -v android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
