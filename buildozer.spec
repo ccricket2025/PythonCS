@@ -68,11 +68,8 @@ android.gradle_dependencies = com.google.mlkit:text-recognition:16.0.0,androidx.
 # (list) Android AAR libraries to add
 # android.add_aars =
 
-# (list) Packaging options
-android.packaging_options = pickFirst 'lib/arm64-v8a/libc++_shared.so', pickFirst 'lib/armeabi-v7a/libc++_shared.so'
-
 # (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
-android.archs = arm64-v8a, armeabi-v7a
+android.archs = arm64-v8a
 
 # (bool) enables Android auto backup feature (Android API >=23)
 android.allow_backup = True
