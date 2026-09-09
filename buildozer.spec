@@ -42,15 +42,11 @@ android.permissions = CAMERA,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,READ_M
 
 # (int) Target Android API, should be as high as possible.
 android.api = 34
-
-# (int) Minimum API your APK / AAB will support.
 android.minapi = 24
-
-# (int) Android SDK version to use
 android.sdk = 34
-
-# (str) Android NDK version to use
 android.ndk = 25b
+android.accept_sdk_license = True
+android.archs = arm64-v8a
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 android.private_storage = True
@@ -67,9 +63,6 @@ android.gradle_dependencies = com.google.mlkit:text-recognition:16.0.0,androidx.
 
 # (list) Android AAR libraries to add
 # android.add_aars =
-
-# (list) The Android archs to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
-android.archs = arm64-v8a
 
 # (bool) enables Android auto backup feature (Android API >=23)
 android.allow_backup = True
