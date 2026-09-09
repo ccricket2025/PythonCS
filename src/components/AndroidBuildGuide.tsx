@@ -81,15 +81,18 @@ export function AndroidBuildGuide() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div className="lg:col-span-8 bg-white border border-stone-200 rounded-xl p-6 shadow-xs flex flex-col gap-5">
             {/* Quick Fix for the user's exact error */}
-            <div className="bg-emerald-50 border-2 border-emerald-400 rounded-xl p-4 flex flex-col gap-3">
+            <div className="bg-emerald-50 border-2 border-emerald-500 rounded-xl p-4 flex flex-col gap-3">
               <div className="flex items-start gap-2.5">
-                <AlertTriangle className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
                 <div className="flex flex-col gap-1">
                   <span className="font-bold text-emerald-950 text-xs sm:text-sm">
-                    à¦¸à¦°à§à¦¬à¦¶à§‡à¦· à¦à¦°à¦° à¦¸à¦®à¦¾à¦§à¦¾à¦¨: &quot;ppa:openjdk-r/ppa 404 Not Found / Broken pipe&quot;
+                    Link Check à¦«à¦²à¦¾à¦«à¦²: Step 8 Line 32 à¦à¦°à¦° à¦¸à¦®à¦¾à¦§à¦¾à¦¨ ([Errno 32] Broken pipe)
                   </span>
                   <p className="text-stone-700 text-xs leading-relaxed">
-                    à¦†à¦ªà¦¨à¦¾à¦° à¦¸à¦°à§à¦¬à¦¶à§‡à¦· à¦¸à§à¦•à§à¦°à¦¿à¦¨à¦¶à¦Ÿà§‡ à¦¦à§‡à¦–à¦¾ à¦¯à¦¾à¦šà§à¦›à§‡ à¦¡à¦•à¦¾à¦° à¦…à§à¦¯à¦¾à¦•à¦¶à¦¨à¦Ÿà¦¿ à¦¬à¦¿à¦²à§à¦¡ à¦•à¦°à¦¤à§‡ à¦—à¦¿à§Ÿà§‡ <code className="font-mono bg-red-100 text-red-900 px-1 py-0.5 rounded">ppa:openjdk-r/ppa 404 Not Found</code> à¦à¦°à¦° à¦¦à¦¿à§Ÿà§‡ à¦«à§‡à¦‡à¦² à¦•à¦°à§‡à¦›à§‡ (à¦•à¦¾à¦°à¦£ à¦²à¦žà§à¦šà¦ªà§à¦¯à¦¾à¦¡à§‡ à¦ªà§à¦°à§‹à¦¨à§‹ PPA à¦†à¦° à¦¨à§‡à¦‡)à¥¤ à¦à¦° à¦¸à¦¬à¦šà§‡à§Ÿà§‡ à¦¸à§à¦¥à¦¾à§Ÿà§€ à¦“ à¦¨à¦¿à¦–à§à¦à¦¤ à¦¸à¦®à¦¾à¦§à¦¾à¦¨ à¦¹à¦²à§‹ <strong>Ubuntu 22.04</strong> à¦°à¦¾à¦¨à¦¾à¦°à§‡ à¦¸à¦°à¦¾à¦¸à¦°à¦¿ Java 17 à¦“ Buildozer à¦šà¦¾à¦²à¦¾à¦¨à§‹ à¦à¦¬à¦‚ <code className="font-mono bg-stone-100 px-1 py-0.5 rounded font-bold">set +o pipefail</code> à¦¦à¦¿à§Ÿà§‡ Broken Pipe à¦¬à¦¨à§à¦§ à¦•à¦°à¦¾à¥¤
+                    à¦†à¦ªà¦¨à¦¾à¦° à¦¦à§‡à¦“à§Ÿà¦¾ à¦²à¦¿à¦™à§à¦• (<code className="font-mono bg-emerald-100 text-emerald-950 px-1 py-0.5 rounded font-bold">#step:8:32</code>) à¦šà§‡à¦• à¦•à¦°à¦¾ à¦¹à§Ÿà§‡à¦›à§‡à¥¤ Step 8 (Build APK with Buildozer)-à¦ <code className="font-mono bg-stone-100 px-1 py-0.5 rounded font-bold">yes | buildozer</code> à¦ªà¦¾à¦‡à¦ª à¦•à¦°à¦¾à¦° à¦•à¦¾à¦°à¦£à§‡ à¦¸à¦¾à¦¬-à¦ªà§à¦°à¦¸à§‡à¦¸à§‡ <strong className="text-red-700 font-mono">Errno 32: Broken pipe</strong> à¦¤à§ˆà¦°à¦¿ à¦¹à§Ÿà§‡ à¦¬à¦¿à¦²à§à¦¡ à¦¬à¦¨à§à¦§ à¦¹à§Ÿà§‡à¦›à¦¿à¦²à¥¤
+                  </p>
+                  <p className="text-stone-700 text-xs leading-relaxed font-semibold text-emerald-900">
+                    ðŸ’¡ à¦…à¦«à¦¿à¦¸à¦¿à§Ÿà¦¾à¦² à¦“ à¦¸à§à¦¥à¦¾à§Ÿà§€ à¦¸à¦®à¦¾à¦§à¦¾à¦¨: <code className="font-mono bg-white px-1 py-0.5 border rounded">buildozer.spec</code> à¦«à¦¾à¦‡à¦²à§‡ <code className="font-mono bg-emerald-200 text-emerald-950 px-1 py-0.5 rounded">android.accept_sdk_license = True</code> à¦²à¦¿à¦–à§‡ à¦¦à§‡à¦“à§Ÿà¦¾à¥¤ à¦à¦¤à§‡ Buildozer à¦•à§‹à¦¨à§‹ à¦ªà¦¾à¦‡à¦ª (<code className="font-mono">yes |</code>) à¦›à¦¾à§œà¦¾à¦‡ à¦¸à§à¦¬à§Ÿà¦‚à¦•à§à¦°à¦¿à§Ÿà¦­à¦¾à¦¬à§‡ à¦²à¦¾à¦‡à¦¸à§‡à¦¨à§à¦¸ à¦—à§à¦°à¦¹à¦£ à¦•à¦°à§‡ à¦à¦¬à¦‚ à¦•à§‹à¦¨à§‹ Broken pipe à¦¬à¦¾ à¦•à§à¦°à§à¦¯à¦¾à¦¶ à¦¹à§Ÿ à¦¨à¦¾!
                   </p>
                 </div>
               </div>
@@ -98,7 +101,7 @@ export function AndroidBuildGuide() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-stone-900 font-mono flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    à§§à§¦à§¦% à¦¨à¦¿à¦°à§à¦­à¦°à¦¯à§‹à¦—à§à¦¯ .github/workflows/build-apk.yml à¦•à§‹à¦¡:
+                    à¦ªà¦°à¦¿à¦¶à§‹à¦§à¦¿à¦¤ .github/workflows/build-apk.yml (à¦•à§‹à¦¨à§‹ Broken Pipe à¦›à¦¾à§œà¦¾):
                   </span>
                   <button
                     onClick={() => copySnippet(`name: Build Android APK with Buildozer
@@ -149,6 +152,7 @@ jobs:
             libsqlite3-dev \\
             zlib1g-dev \\
             cmake \\
+            ninja-build \\
             autoconf \\
             automake \\
             libtool \\
@@ -157,7 +161,9 @@ jobs:
             unzip \\
             libncurses5-dev \\
             libncursesw5-dev \\
-            libtinfo5
+            libtinfo5 \\
+            autopoint \\
+            gettext
 
       - name: Install Python Dependencies & Buildozer
         run: |
@@ -166,11 +172,8 @@ jobs:
           pip install buildozer
 
       - name: Build APK with Buildozer
-        shell: bash
         run: |
-          # Disable pipefail so broken pipe does not abort the workflow
-          set +o pipefail
-          yes | buildozer -v android debug
+          buildozer -v android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -184,14 +187,18 @@ jobs:
                     {copiedIndex === 99 ? 'à¦•à¦ªà¦¿ à¦¹à§Ÿà§‡à¦›à§‡!' : 'à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦¸à¦®à§à¦ªà§‚à¦°à§à¦£ à¦•à§‹à¦¡ à¦•à¦ªà¦¿ à¦•à¦°à§à¦¨'}
                   </button>
                 </div>
-                <div className="bg-stone-50 border border-stone-200 rounded p-2 text-[11px] text-stone-700 space-y-1.5">
-                  <p><strong>à¦•à§€à¦­à¦¾à¦¬à§‡ à¦¸à§‡à¦Ÿ à¦•à¦°à¦¬à§‡à¦¨ (à¦®à¦¾à¦¤à§à¦° à§¨à¦Ÿà¦¿ à¦§à¦¾à¦ª):</strong></p>
-                  <p>à§§. à¦†à¦ªà¦¨à¦¾à¦° à¦—à¦¿à¦Ÿà¦¹à¦¾à¦¬ à¦°à¦¿à¦ªà§‹à¦œà¦¿à¦Ÿà¦°à¦¿à¦° <strong><code className="bg-white px-1 py-0.5 border rounded">.github/workflows/build-apk.yml</code></strong> à¦«à¦¾à¦‡à¦²à§‡ à¦à¦‡ à¦•à§‹à¦¡à¦Ÿà¦¿ à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§‡ Commit à¦•à¦°à§à¦¨à¥¤</p>
-                  <p>à§¨. à¦†à¦ªà¦¨à¦¾à¦° <strong><code className="bg-white px-1 py-0.5 border rounded">buildozer.spec</code></strong> à¦«à¦¾à¦‡à¦²à§‡ à¦¨à¦¿à¦¶à§à¦šà¦¿à¦¤ à¦•à¦°à§à¦¨:</p>
-                  <code className="block bg-stone-900 text-emerald-400 p-2 rounded font-mono text-[11px] space-y-0.5">
-                    <div>requirements = python3,kivy,kivymd,pillow,numpy,opencv,pyjnius,android</div>
+                <div className="bg-stone-50 border border-stone-200 rounded p-2.5 text-[11px] text-stone-700 space-y-2">
+                  <p><strong>à¦•à§€à¦­à¦¾à¦¬à§‡ à¦¸à¦®à¦¾à¦§à¦¾à¦¨ à¦•à¦°à¦¬à§‡à¦¨ (à§¨à¦Ÿà¦¿ à¦«à¦¾à¦‡à¦² à¦†à¦ªà¦¡à§‡à¦Ÿ à¦•à¦°à§à¦¨):</strong></p>
+                  <p>à§§. à¦†à¦ªà¦¨à¦¾à¦° à¦°à¦¿à¦ªà§‹à¦œà¦¿à¦Ÿà¦°à¦¿à¦° <strong><code className="bg-white px-1 py-0.5 border rounded">buildozer.spec</code></strong> à¦«à¦¾à¦‡à¦²à§‡ <code className="font-mono bg-emerald-100 px-1 py-0.5 rounded text-emerald-900 font-bold">android.accept_sdk_license = True</code> à¦¯à§‹à¦— à¦•à¦°à§à¦¨:</p>
+                  <code className="block bg-stone-900 text-emerald-400 p-2.5 rounded font-mono text-[11px] space-y-0.5">
+                    <div>android.api = 34</div>
+                    <div>android.minapi = 24</div>
+                    <div>android.sdk = 34</div>
+                    <div>android.ndk = 25b</div>
+                    <div className="text-yellow-300 font-bold">android.accept_sdk_license = True</div>
                     <div>android.archs = arm64-v8a</div>
                   </code>
+                  <p>à§¨. à¦†à¦ªà¦¨à¦¾à¦° à¦—à¦¿à¦Ÿà¦¹à¦¾à¦¬ à¦°à¦¿à¦ªà§‹à¦œà¦¿à¦Ÿà¦°à¦¿à¦° <strong><code className="bg-white px-1 py-0.5 border rounded">.github/workflows/build-apk.yml</code></strong> à¦«à¦¾à¦‡à¦²à§‡ à¦‰à¦ªà¦°à§‡à¦° à¦¸à¦¬à§à¦œ à¦¬à¦¾à¦Ÿà¦¨à§‡à¦° à¦•à§‹à¦¡à¦Ÿà¦¿ à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§‡ Commit à¦•à¦°à§à¦¨à¥¤</p>
                 </div>
               </div>
             </div>
