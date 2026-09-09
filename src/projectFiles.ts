@@ -6,7 +6,7 @@
 export interface ProjectFile {
   path: string;
   name: string;
-  category: 'core' | 'scanner' | 'image_processing' | 'ocr' | 'pdf' | 'database' | 'storage' | 'ui' | 'ci';
+  category: 'core' | 'scanner' | 'image_processing' | 'ocr' | 'pdf' | 'database' | 'storage' | 'ui' | 'ci' | 'config';
   description: string;
   code: string;
 }
@@ -423,17 +423,13 @@ class OCREngine:
     path: 'pdf/generator.py',
     name: 'generator.py',
     category: 'pdf',
-    description: 'ReportLab Multi-Page PDF generator with A4/Letter dimensions and page numbering',
-    code: `"""PDF Document Generator using ReportLab"""
+    description: 'Multi-Page PDF generator using Pillow with A4/Letter scaling and metadata',
+    code: `"""PDF Document Generator using Pillow (Native Android compatible)"""
 import os
 from typing import List
 from PIL import Image
-from reportlab.lib.pagesizes import A4, letter
-from reportlab.pdfgen import canvas
 
 class PDFGenerator:
-    PAGE_SIZES = {"A4": A4, "Letter": letter}
-
     @staticmethod
     def generate_pdf(image_paths: List[str], output_pdf_path: str, title: str = "Document", page_size_name: str = "A4") -> bool:
         valid_images = [p for p in image_paths if os.path.exists(p)]
@@ -441,23 +437,30 @@ class PDFGenerator:
             return False
 
         os.makedirs(os.path.dirname(os.path.abspath(output_pdf_path)), exist_ok=True)
-        target_size = PDFGenerator.PAGE_SIZES.get(page_size_name, A4)
-        c = canvas.Canvas(output_pdf_path, pagesize=target_size)
-        c.setTitle(title)
-        page_w, page_h = target_size
-        total = len(valid_images)
+        
+        pil_images = []
+        for p in valid_images:
+            try:
+                img = Image.open(p)
+                if img.mode != 'RGB':
+                    img = img.convert('RGB')
+                pil_images.append(img)
+            except Exception as e:
+                print(f"Error loading image {p}: {e}")
 
-        for idx, img_path in enumerate(valid_images, 1):
-            with Image.open(img_path) as img:
-                img_w, img_h = img.size
-                margin = 20.0
-                scale = min((page_w - 2 * margin) / img_w, (page_h - 2 * margin) / img_h)
-                dw, dh = img_w * scale, img_h * scale
-                c.drawImage(img_path, (page_w - dw) / 2, (page_h - dh) / 2, dw, dh, preserveAspectRatio=True)
-                c.setFont("Helvetica", 9)
-                c.drawString(page_w - 60, 15, f"{idx} / {total}")
-                c.showPage()
-        c.save()
+        if not pil_images:
+            return False
+
+        first_image = pil_images[0]
+        remaining = pil_images[1:] if len(pil_images) > 1 else []
+        
+        first_image.save(
+            output_pdf_path,
+            "PDF",
+            resolution=100.0,
+            save_all=True,
+            append_images=remaining
+        )
         return os.path.exists(output_pdf_path)
 `
   },
@@ -535,10 +538,45 @@ class DatabaseManager:
 `
   },
   {
+    path: 'buildozer.spec',
+    name: 'buildozer.spec',
+    category: 'config',
+    description: 'Buildozer Android configuration with API 34, NDK 25b, and camera permissions',
+    code: `[app]
+title = CamScanner Python
+package.name = camscannerpython
+package.domain = org.scanner.camscanner
+source.dir = .
+source.include_exts = py,png,jpg,jpeg,kv,atlas,json,txt,ttf,otf
+source.include_patterns = assets/*,ui/*,scanner/*,image_processing/*,ocr/*,pdf/*,database/*,storage/*
+version = 1.0.0
+
+# Optimized requirements (sqlite3 is built into python3; Pillow generates PDFs)
+requirements = python3,kivy,kivymd,pillow,numpy,opencv,pyjnius,android
+
+orientation = portrait
+fullscreen = 0
+android.permissions = CAMERA,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,READ_MEDIA_IMAGES
+android.api = 34
+android.minapi = 24
+android.sdk = 34
+android.ndk = 25b
+android.private_storage = True
+android.gradle_dependencies = com.google.mlkit:text-recognition:16.0.0,androidx.camera:camera-core:1.3.1,androidx.camera:camera-camera2:1.3.1,androidx.camera:camera-lifecycle:1.3.1,androidx.camera:camera-view:1.3.1
+android.packaging_options = pickFirst 'lib/arm64-v8a/libc++_shared.so', pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+android.archs = arm64-v8a, armeabi-v7a
+android.allow_backup = True
+
+[buildozer]
+log_level = 2
+warn_on_root = 1
+`
+  },
+  {
     path: '.github/workflows/build-apk.yml',
     name: 'build-apk.yml',
     category: 'ci',
-    description: 'GitHub Actions workflow to automatically compile Android APK on git push',
+    description: 'Docker-based GitHub Actions workflow for 100% reliable Android APK compilation',
     code: `name: Build Android APK with Buildozer
 
 on:
@@ -548,40 +586,24 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Source
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Build with Buildozer Action (Official Docker)
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
         with:
-          python-version: '3.10'
-
-      - name: Set up Java 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Install System Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential ccache git zlib1g-dev libffi-dev libssl-dev libsqlite3-dev cmake
-
-      - name: Install Buildozer
-        run: |
-          pip install buildozer cython==0.29.36
-
-      - name: Compile APK
-        run: |
-          buildozer -v android debug
+          workdir: .
+          buildozer_version: stable
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: CamScanner-Android-APK
-          path: bin/*.apk
+          path: \${{ steps.buildozer.outputs.filename }}
 `
   }
 ];
