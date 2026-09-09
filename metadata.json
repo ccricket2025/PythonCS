@@ -1,0 +1,6 @@
+{
+  "name": "CamScanner Python & Android Scanner",
+  "description": "Full-featured Python, KivyMD, and OpenCV Android document scanner project files with interactive web scanner and APK export guide.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

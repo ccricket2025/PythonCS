@@ -1,0 +1,20 @@
+# Python CamScanner Android Dependencies
+# Core Framework & UI
+kivy>=2.3.0
+kivymd>=1.2.0
+
+# Image Processing & Computer Vision
+opencv-python-headless>=4.8.0.76
+numpy>=1.24.0
+pillow>=10.0.0
+
+# Document & PDF Generation
+reportlab>=4.0.0
+pypdf>=3.17.0
+
+# OCR & Text Processing (Optional desktop fallback, ML Kit used on Android)
+pytesseract>=0.3.10
+
+# Android Bridge & Build
+pyjnius>=1.6.0
+cython>=0.29.36
